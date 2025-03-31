@@ -1,0 +1,73 @@
+1. 🔹 What is Apache Airflow?
+Apache Airflow is an open-source workflow orchestration tool that helps automate, schedule, and monitor data pipelines. It is widely used in ETL (Extract, Transform, Load), Machine Learning, and Cloud Workflows.
+
+2. 🛠️ How Apache Airflow Works?
+1️⃣ DAG (Directed Acyclic Graph) → A workflow structure that defines tasks & dependencies
+2️⃣ Tasks (Operators) → Each step in the workflow (e.g., extract, transform, load)
+3️⃣ Scheduler → Decides when and how tasks should run
+4️⃣ Executor → Runs tasks (local, Celery, Kubernetes, etc.)
+5️⃣ Web UI → Monitors workflow execution and logs
+
+3. 🔹 1. Scheduler
+The core component that parses DAGs, determines task dependencies, and assigns executable tasks to the Executor.
+Responsibilities:
+Periodically scan DAG files
+Schedule and trigger tasks based on dependencies
+Send runnable tasks to the Executor
+Task Trigger Methods:
+Time-based scheduling (using cron expressions)
+Event-driven triggers
+Dependencies on other DAG tasks
+
+4. 🔹 Apache Airflow Architecture
+
+Apache Airflow's architecture is designed to manage and orchestrate workflows efficiently. Below are the key components:
+
+1️⃣ **DAGs (Directed Acyclic Graphs)**:
+   - Define workflows as a series of tasks with dependencies.
+   - Written in Python, allowing dynamic and flexible workflows.
+
+2️⃣ **Scheduler**:
+   - Periodically scans DAG files to identify tasks that need to run.
+   - Determines task dependencies and schedules tasks accordingly.
+
+3️⃣ **Executor**:
+   - Executes tasks in the workflow.
+   - Types of Executors:
+     - **SequentialExecutor**: Runs tasks sequentially (for testing or small-scale use).
+     - **LocalExecutor**: Runs tasks in parallel on the same machine.
+     - **CeleryExecutor**: Distributes tasks across multiple workers (for large-scale workflows).
+     - **KubernetesExecutor**: Runs tasks in Kubernetes pods for scalability and isolation.
+
+4️⃣ **Metadata Database**:
+   - Stores the state of DAGs, tasks, and their execution history.
+   - Commonly uses databases like PostgreSQL or MySQL.
+
+5️⃣ **Web Server (Web UI)**:
+   - Provides a user interface to monitor, manage, and debug workflows.
+   - Displays DAGs, task statuses, logs, and execution history.
+
+6️⃣ **Workers**:
+   - Execute tasks assigned by the Executor.
+   - In distributed setups (e.g., CeleryExecutor), workers run on separate machines.
+
+7️⃣ **Triggerer**:
+   - Handles event-based triggers for tasks that depend on external events.
+
+8️⃣ **Logs**:
+   - Stores logs for each task execution, which can be accessed via the Web UI.
+
+---
+
+### **How the Components Work Together**
+1. **DAGs** are defined in Python and stored in the DAG folder.
+2. The **Scheduler** scans the DAGs, determines dependencies, and schedules tasks.
+3. The **Executor** assigns tasks to **Workers** for execution.
+4. The **Metadata Database** tracks the state of tasks and workflows.
+5. The **Web Server** provides a UI for monitoring and managing workflows.
+6. Logs are generated for each task and stored for debugging and auditing.
+
+---
+
+This architecture allows Apache Airflow to scale from small, single-machine setups to large, distributed systems, making it a powerful tool for orchestrating complex workflows.
+

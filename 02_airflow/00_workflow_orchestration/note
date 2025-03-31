@@ -1,0 +1,45 @@
+1. 1️⃣ What is a Data Pipeline? 🚰
+A Data Pipeline is a series of steps to move, transform, and process data from one system to another. It automates data movement between sources (databases, APIs, files) and destinations (data warehouses, data lakes).
+📌 Key Components of a Data Pipeline:
+🔹 Data Ingestion → Extract data from multiple sources
+🔹 Data Transformation → Clean, filter, and aggregate data
+🔹 Data Loading → Store the processed data in a target system
+🔹 Monitoring & Error Handling → Ensure reliability and correctness
+🛠 Examples of Data Pipeline Tools:
+Batch Processing: Apache Spark, AWS Glue, Google Dataflow
+Stream Processing: Apache Kafka, Apache Flink
+
+2. 2️⃣ What is Workflow Orchestration? 🎛️
+Workflow Orchestration is the process of managing and scheduling multiple interdependent tasks within a data pipeline. It ensures that tasks run in the correct order, with the right dependencies, and at the right time.
+
+3. 📌 Key Responsibilities of Workflow Orchestration:
+✅ Task Scheduling → Runs tasks at specific times or based on triggers
+✅ Dependency Management → Ensures tasks execute in the correct sequence
+✅ Monitoring & Alerts → Tracks execution, logs errors, and retries failed jobs
+✅ Resource Optimization → Allocates computing power efficiently
+🛠 Examples of Workflow Orchestration Tools:
+Apache Airflow 🏗️
+Prefect ⏳
+Dagster 🔄
+Google Cloud Composer ☁️
+
+
+4. DAG (Directed Acyclic Graph) in Data Engineering
+A DAG (Directed Acyclic Graph) is a key concept in workflow orchestration, especially in tools like Apache Airflow. It represents a series of tasks that must be executed in a specific order, ensuring that no cycles (infinite loops) exist.
+
+5. 🔹 What is a DAG?
+✅ Directed → Tasks have a clear sequence (A → B → C)
+✅ Acyclic → No task loops back to an earlier task (No A → B → A)
+✅ Graph → A structure of nodes (tasks) and edges (dependencies)
+
+6. 🚀 Why Use DAGs in Workflow Orchestration?
+✅ Manages Dependencies → Ensures tasks run in the right order
+✅ Prevents Infinite Loops → No cycles mean no infinite execution
+✅ Enables Parallel Execution → Some tasks can run at the same time
+✅ Easily Scalable → Modify and extend workflows dynamically
+🔹 Tools Using DAGs:
+Apache Airflow 🏗️
+Luigi 🍄
+Prefect ⏳
+Dagster 🔄
+
