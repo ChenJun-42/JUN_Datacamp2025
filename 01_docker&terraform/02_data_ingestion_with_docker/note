@@ -1,0 +1,40 @@
+# I have learned how to migrate data processing scripts from a local environment to Docker containers
+# And I gained an understanding of Docker network configuration and inter-container communication.
+# These skills are essential for building containerized data processing and deployment workflows.
+
+# first step, transfer my jupyter notebook to python script
+jupyter nbconvert --to=script load-data.ipynb
+
+# explain why use __name__ == '__main__'
+# https://stackoverflow.com/questions/419163/what-does-if-name-main-do
+
+# second step, run the python script, but it run in my local machine not in the docker container
+python3 ingest_data.py \
+    --user=root \
+    --password=root \
+    --host=localhost \
+    --port=5432 \
+    --db=ny_taxi \
+    --table_name=yellow_taxi_data \
+    --url="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz"
+
+# if i want to run the python script in the docker container, i need to build the docker image first
+# and then run the docker container
+
+# third step, build the docker image, write a Dockerfile
+docker build -t ingest_data:v003 .
+
+# By using the container name ny_postgres as the host, 
+# the ingest_data container should be able to connect to the PostgreSQL database.
+docker run -it \
+    --network=pg_network \
+    ingest_data:v003 \
+        --user=root \
+        --password=root \
+        --host=ny_postgres \
+        --port=5432 \
+        --db=ny_taxi \
+        --table_name=yellow_taxi_data \
+        --url="https://github.com/DataTalksClub/nyc-tlc-data/releases/download/yellow/yellow_tripdata_2021-01.csv.gz"
+
+python -m http.server 8000

@@ -1,0 +1,23 @@
+Create a VM in GCE
+
+1. create a ssh key
+    ssh-keygen -t rsa -f gpc -C cj -b 2048
+
+2. Go to GCE megadata ssh key, and add ssh pub key 
+
+3. create a virtual machine and logging in use cmd(ssh -i cj@externalip)
+
+4. in your ssh directory, create a config
+    Host cj-vm
+        HostName 34.68.238.101
+        User cj
+        IdentityFile ~/.ssh/gcp
+
+5. isntall Anaconda
+
+6. sudo apt-get update and sudo apt-get install docker.io
+
+7. using vscode to connect to vm(add remote ssh extension)
+
+
+

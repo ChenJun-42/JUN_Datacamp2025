@@ -1,0 +1,78 @@
+# docker composer is a tool to define and mamnage multi-container docker applications using a YAML file
+# docker-compose.yml is a file where we define the services, networks and volumes for our application
+# instead of running mutiple docker commands to start the containers
+# we can use [ docker-compose up ] command to start the containers
+# we can use [ docker-compose down ] command to stop the containers
+# we can use [ docker-compose ps ] command to list the containers
+# we can use [ docker-compose logs ] command to view the logs of the containers
+# we can use [ docker-compose exec ] command to run a command in a running container
+# we can use [ docker-compose build ] command to build the images
+# we can use [ docker-compose pull ] command to pull the images
+
+# command to run a postgres container
+docker run -it \
+    -e  POSTGRES_USER="root"\
+    -e  POSTGRES_PASSWORD="root"\
+    -e  POSTGRES_DB="ny_taxi"\
+    -v $(pwd)/ny_taxi_postgres_data:/var/lib/postgresql/data \
+    -p 5432:5432 \
+    --name cj_postgres \
+postgres:16
+
+# if you exit the container, you can use the following command to start the container
+docker start cj_postgres
+
+# what is pgcli?
+# pgcli is a command line interface for Postgres with auto-completion and syntax highlighting
+# how to use pgcli, input pgcli --help
+pgcli -h localhost -U root -d ny_taxi
+\d yellow_taxi_data
+# COUNT(1) → Counts the number of rows, treating each row as 1.
+# FROM yellow_taxi_data → Specifies the table.
+SELECT COUNT(1) FROM yellow_taxi_data;
+
+# now it is a empty database, use jupyter notebook
+# what is jupyter notebook:   Jupyter Notebook is an open-source web application that allows you to create and share documents that contain live code, equations, visualizations and narrative text.
+# how to use jupyter notebook: input jupyter notebook in shell
+jupyter notebook
+
+# another good tool is pgadmin4, it is a open source administration and development platform for PostgreSQL
+# how to use in docker: input 
+docker run -it \
+    -e PGADMIN_DEFAULT_EMAIL="admin@admin.com" \
+    -e PGADMIN_DEFAULT_PASSWORD="root" \
+    -p 8080:80 \
+    --name cj_pgadmin \
+dpage/pgadmin4
+
+# if you already start the container, now you can open your google chrome and input http://localhost:8080
+# then you can login with the email and password you set before
+# then you can add a new server with the following information
+# host: cj_postgres
+# port: 5432
+# username: root
+# password: root
+# then you can see the database ny_taxi and the table yellow_taxi_data
+# but actually, we can not connect to the database.
+# because both pgadmin4 and postgres are running in different containers
+# we need to create a network to connect them
+# we can use docker network create to create a network
+docker network create pg_network
+
+docker run -it \
+    -e  POSTGRES_USER="root"\
+    -e  POSTGRES_PASSWORD="root"\
+    -e  POSTGRES_DB="ny_taxi"\
+    -v $(pwd)/ny_taxi_postgres_data:/var/lib/postgresql/data \
+    -p 5432:5432 \
+    --network=pg_network \
+    --name cj_postgres \
+postgres:16
+
+docker run -it \
+    -e PGADMIN_DEFAULT_EMAIL="admin@admin.com" \
+    -e PGADMIN_DEFAULT_PASSWORD="root" \
+    -p 8080:80 \
+    --network=pg_network \
+    --name cj_pgadmin \
+dpage/pgadmin4

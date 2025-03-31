@@ -1,0 +1,175 @@
+1. 
+SELECT *FROM yellow_taxi_data LIMIT 100;
+
+2. 
+DROP TABLE yellow_taxi_data;
+
+3. 
+SELECT 
+	* 
+FROM
+	yellow_taxi_data t,
+	taxi_zone zpu,
+	taxi_zone zdo
+WHERE
+	t."PULocationID" = zpu."LocationID" AND
+	t."DOLocationID" = zdo."LocationID"
+LIMIT 100;
+
+4. implicit join
+SELECT 
+	tpep_pickup_datetime,
+	tpep_dropoff_datetime,
+	total_amount,
+	CONCAT(zpu."Borough", '/', zpu."Zone") AS "pickup_loc",
+	CONCAT(zdo."Borough", '/', zdo."Zone") AS "dropoff_loc"
+FROM
+	yellow_taxi_data t,
+	taxi_zone zpu,
+	taxi_zone zdo
+WHERE
+	t."PULocationID" = zpu."LocationID" AND
+	t."DOLocationID" = zdo."LocationID"
+LIMIT 100;
+
+5. inner join
+SELECT 
+	tpep_pickup_datetime,
+	tpep_dropoff_datetime,
+	total_amount,
+	CONCAT(zpu."Borough", '/', zpu."Zone") AS "pickup_loc",
+	CONCAT(zdo."Borough", '/', zdo."Zone") AS "dropoff_loc"
+FROM
+	yellow_taxi_data t JOIN taxi_zone zpu
+        ON t."PULocationID" = zpu."LocationID"
+    JOIN taxi_zone zdo
+        ON t."DOLocationID" = zdo."LocationID"
+LIMIT 100;
+
+6. 
+SELECT 
+	tpep_pickup_datetime,
+	tpep_dropoff_datetime,
+	total_amount,
+	"PULocationID",
+	"DOLocationID"
+FROM
+	yellow_taxi_data t
+WHERE
+	"DOLocationID" is NULL
+LIMIT 100;
+
+7.
+SELECT 
+	tpep_pickup_datetime,
+	tpep_dropoff_datetime,
+	total_amount,
+	"PULocationID",
+	"DOLocationID"
+FROM
+	yellow_taxi_data t
+WHERE
+	"DOLocationID" NOT IN (SELECT "LocationID" FROM taxi_zone)
+LIMIT 100;
+
+8.
+DELETE FROM taxi_zone WHERE "LocationID"=142;
+
+9. LEFT JOIN
+SELECT 
+	tpep_pickup_datetime,
+	tpep_dropoff_datetime,
+	total_amount,
+	CONCAT(zpu."Borough", '/', zpu."Zone") AS "pickup_loc",
+	CONCAT(zdo."Borough", '/', zdo."Zone") AS "dropoff_loc"
+FROM
+	yellow_taxi_data t LEFT JOIN taxi_zone zpu
+        ON t."PULocationID" = zpu."LocationID"
+    LEFT JOIN taxi_zone zdo
+        ON t."DOLocationID" = zdo."LocationID"
+LIMIT 100;
+
+10. RIGHT JOIN
+SELECT 
+	tpep_pickup_datetime,
+	tpep_dropoff_datetime,
+	total_amount,
+	CONCAT(zpu."Borough", '/', zpu."Zone") AS "pickup_loc",
+	CONCAT(zdo."Borough", '/', zdo."Zone") AS "dropoff_loc"
+FROM
+	yellow_taxi_data t RIGHT JOIN taxi_zone zpu
+        ON t."PULocationID" = zpu."LocationID"
+    RIGHT JOIN taxi_zone zdo
+        ON t."DOLocationID" = zdo."LocationID"
+LIMIT 1000;
+
+11. FULL JOIN
+SELECT 
+	tpep_pickup_datetime,
+	tpep_dropoff_datetime,
+	total_amount,
+	CONCAT(zpu."Borough", '/', zpu."Zone") AS "pickup_loc",
+	CONCAT(zdo."Borough", '/', zdo."Zone") AS "dropoff_loc"
+FROM
+	yellow_taxi_data t FULL OUTER JOIN taxi_zone zpu
+        ON t."PULocationID" = zpu."LocationID"
+    FULL OUTER JOIN taxi_zone zdo
+        ON t."DOLocationID" = zdo."LocationID"
+LIMIT 100;
+
+12. TRuncate
+SELECT 
+	tpep_pickup_datetime,
+	tpep_dropoff_datetime,
+	CAST('DAY', tpep_dropoff_datetime),
+	total_amount
+FROM
+	yellow_taxi_data t
+LIMIT 100;
+
+13.Group by and order by
+SELECT 
+    CAST(tpep_dropoff_datetime AS DATE) AS "DAY",
+    COUNT(1) AS trip_count
+FROM yellow_taxi_data t
+GROUP BY CAST(tpep_dropoff_datetime AS DATE)
+ORDER BY "DAY" ASC;
+
+14. PostgreSQL date functions
+SELECT 
+    DATE(tpep_dropoff_datetime) AS "DAY",
+    COUNT(*) AS trip_count
+FROM yellow_taxi_data
+GROUP BY DATE(tpep_dropoff_datetime)
+ORDER BY "DAY";
+
+15. DESC order
+SELECT 
+    DATE(tpep_dropoff_datetime) AS "DAY",
+    COUNT(*) AS trip_count
+FROM yellow_taxi_data
+GROUP BY DATE(tpep_dropoff_datetime)
+ORDER BY "trip_count" desc;
+
+16. MAX and MIN
+SELECT 
+    DATE(tpep_dropoff_datetime) AS "DAY",
+    COUNT(*) AS trip_count,
+    MAX(total_amount) AS max_total_amount,
+    MAX(passenger_count) AS max_passenger_count
+FROM yellow_taxi_data
+GROUP BY DATE(tpep_dropoff_datetime)
+ORDER BY trip_count DESC;
+
+17. Group by Many Fields
+SELECT 
+    DATE(tpep_dropoff_datetime) AS "DAY",
+	"DOLocationID",
+    COUNT(*) AS trip_count,
+    MAX(total_amount) AS max_total_amount,
+    MAX(passenger_count) AS max_passenger_count
+FROM yellow_taxi_data
+GROUP BY 1, 2
+ORDER BY
+	"DAY" ASC,
+	"DOLocationID" ASC;

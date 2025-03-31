@@ -1,0 +1,140 @@
+# 1. SQL: How to write a SQL to check
+
+## Example: Count rows in a table
+```sql
+SELECT COUNT(*) FROM table_name;
+```
+
+### Notes about this code:
+- **Purpose**: This SQL query is used to count the total number of rows in a table.
+- **Key Components**:
+  - `SELECT`: Retrieves data from the database.
+  - `COUNT(*)`: An aggregate function that counts all rows in the table, including rows with `NULL` values.
+  - `FROM table_name`: Specifies the table to query.
+- **Use Cases**:
+  - To verify the number of records in a table.
+  - To check if data has been successfully imported into the table.
+- **Example**:
+  ```sql
+  SELECT COUNT(*) FROM yellow_taxi_data;
+  ```
+  This query will return the total number of rows in the `yellow_taxi_data` table.
+
+- **Advanced Usage**:
+  - Count rows with specific conditions:
+    ```sql
+    SELECT COUNT(*) FROM table_name WHERE column_name = 'value';
+    ```
+  - Count non-NULL values in a specific column:
+    ```sql
+    SELECT COUNT(column_name) FROM table_name;
+    ```
+
+- **Notes**:
+  - Table names in PostgreSQL are case-sensitive. Use double quotes (`"`) if the table name contains uppercase letters or special characters.
+  - For large tables, `COUNT(*)` may take time as it scans the entire table.
+
+---
+
+# Docker Compose Notes
+
+## What is Docker Compose?
+- Docker Compose is a tool for defining and running multi-container Docker applications.
+- It uses a YAML file (`docker-compose.yaml`) to configure the services, networks, and volumes required for your application.
+- With a single command (`docker compose up`), you can start all the services defined in the file.
+
+---
+
+## Explanation of `docker-compose.yaml`
+
+### Services
+- **`services`**: Defines the containers (services) that will be created and managed by Docker Compose.
+- In this file, there are two services:
+  1. `pgdatabase` (PostgreSQL database)
+  2. `pgadmin` (pgAdmin, a web-based database management tool)
+
+---
+
+### Service: `pgdatabase`
+- **`image: postgres:16`**:
+  - Specifies the Docker image to use for this service.
+  - Here, it uses the official PostgreSQL image, version 16.
+- **`environment`**:
+  - Defines environment variables for the container.
+  - `POSTGRES_USER`: Sets the username for the PostgreSQL database (e.g., `root`).
+  - `POSTGRES_PASSWORD`: Sets the password for the PostgreSQL database (e.g., `root`).
+  - `POSTGRES_DB`: Creates a database named `ny_taxi` when the container starts.
+- **`ports`**:
+  - Maps the container's port `5432` (default PostgreSQL port) to the host's port `5432`.
+  - This allows you to connect to the database from your host machine using `localhost:5432`.
+- **`volumes`**:
+  - Mounts a directory from the host machine to the container.
+  - In this case, the directory `/Users/cj/Desktop/JUN_Datacamp2025/01_ingestion/ny_taxi_postgres_data` on the host is mounted to `/var/lib/postgresql/data` in the container.
+  - This ensures that the database data is persisted on the host machine, even if the container is stopped or removed.
+
+---
+
+### Service: `pgadmin`
+- **`image: dpage/pgadmin4`**:
+  - Specifies the Docker image for pgAdmin, a web-based PostgreSQL management tool.
+- **`environment`**:
+  - Sets environment variables for pgAdmin:
+    - `PGADMIN_DEFAULT_EMAIL`: The default email address for logging into pgAdmin (e.g., `admin@admin.com`).
+    - `PGADMIN_DEFAULT_PASSWORD`: The default password for logging into pgAdmin (e.g., `root`).
+- **`ports`**:
+  - Maps the container's port `80` (default pgAdmin port) to the host's port `8080`.
+  - This allows you to access pgAdmin in your browser at `http://localhost:8080`.
+
+---
+
+## Commands to Use
+
+### Start the Services
+```bash
+docker compose up
+```
+- Starts all the services defined in the `docker-compose.yaml` file.
+- Use the `-d` flag to run the containers in detached mode:
+  ```bash
+  docker compose up -d
+  ```
+
+### Stop the Services
+```bash
+docker compose down
+```
+- Stops and removes all containers, networks, and volumes created by `docker compose up`.
+
+### Check Running Containers
+```bash
+docker ps
+```
+- Lists all running containers.
+
+---
+
+## Key Notes
+1. **Data Persistence**:
+   - The `volumes` section ensures that PostgreSQL data is stored on the host machine, so it won't be lost if the container is removed.
+2. **Networking**:
+   - Docker Compose automatically creates a network for the services, allowing them to communicate with each other using their service names (e.g., `pgdatabase`).
+3. **Accessing pgAdmin**:
+   - Open your browser and go to `http://localhost:8080`.
+   - Use the email and password defined in the `PGADMIN_DEFAULT_EMAIL` and `PGADMIN_DEFAULT_PASSWORD` environment variables to log in.
+
+---
+
+## Example Use Case
+1. Start the services:
+   ```bash
+   docker compose up
+   ```
+2. Access pgAdmin at `http://localhost:8080` and connect to the PostgreSQL database using the following credentials:
+   - **Host**: `pgdatabase`
+   - **Port**: `5432`
+   - **Username**: `root`
+   - **Password**: `root`
+3. Run SQL queries to interact with the `ny_taxi` database.
+
+This setup is ideal for local development and testing of PostgreSQL-based applications.
+

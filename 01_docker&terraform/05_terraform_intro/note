@@ -1,0 +1,90 @@
+Terraform definition: 
+  Terraform is a tool that automates infrastructure management using code. 
+  It helps you define, create, and update cloud resources like servers, databases, and storage automatically.
+
+1. go to gcp and create a service acount
+2. using terraform to connect
+tip：put credentials in global variable：
+      export GOOGLE_CREDENTIALS="/Users/cj/Desktop/JUN_Datacamp2025/05_terraform/key/my-creds.json"
+
+This Terraform code is used to configure and manage resources on Google Cloud Platform (GCP). Here's a detailed explanation of its purpose and functionality:
+
+### **Code Explanation**
+
+#### **1. `terraform` Block**
+```terraform
+terraform {
+  required_providers {
+    google = {
+      source  = "hashicorp/google"
+      version = "6.27.0"
+    }
+  }
+}
+```
+- **Purpose**: Specifies the required providers and their versions for this Terraform configuration.
+- **Key Components**:
+  - **`required_providers`**:
+    - Defines the provider(s) that Terraform will use. In this case, it specifies the `google` provider for managing GCP resources.
+    - **`source`**: Indicates the source of the provider, which is `hashicorp/google` (the official Google Cloud provider maintained by HashiCorp).
+    - **`version`**: Specifies the version of the provider to use (`6.27.0` in this case). This ensures compatibility and avoids unexpected changes from newer versions.
+
+---
+
+#### **2. `provider` Block**
+```terraform
+provider "google" {
+  project = "seventh-league-447908-t0"
+  region  = "us-central1"
+}
+```
+- **Purpose**: Configures the `google` provider with specific settings for your GCP project.
+- **Key Components**:
+  - **`project`**: Specifies the GCP project ID (`seventh-league-447908-t0`) where Terraform will create and manage resources.
+  - **`region`**: Defines the default region (`us-central1`) for resources created by this provider. This ensures that resources are deployed in the specified geographic location.
+
+---
+
+### **Overall Purpose**
+- This code sets up Terraform to manage resources on Google Cloud Platform (GCP) using the `google` provider.
+- It ensures that Terraform uses the correct provider version and connects to the specified GCP project and region.
+
+---
+
+### **Next Steps**
+After this configuration, you can define additional Terraform resources (e.g., virtual machines, storage buckets, databases) in the same file or other `.tf` files. Terraform will use the `google` provider to create and manage these resources in the specified project and region.
+
+For example:
+```terraform
+resource "google_storage_bucket" "example" {
+  name     = "example-bucket"
+  location = "us-central1"
+}
+```
+
+This would create a storage bucket in the `us-central1` region of the specified GCP project.
+
+terraform init
+terraform plan
+terraform apply
+
+What is BigQuery and What is a Dataset?
+📌 What is BigQuery?
+BigQuery is a fully managed, serverless data warehouse provided by Google Cloud, designed for storing, querying, and analyzing large-scale data (terabytes or petabytes).
+
+Key Features:
+✅ Massive-scale querying (optimized for TB/PB-level data)
+✅ SQL support (query data using SQL)
+✅ Serverless architecture (no infrastructure management)
+✅ Automatic scaling (computing resources are allocated dynamically)
+✅ Real-time data analysis (supports streaming data ingestion and queries)
+
+📌 What is a Dataset in BigQuery?
+A Dataset in BigQuery is a logical grouping used to store tables. You can think of a Dataset as a Schema (or Namespace) in a traditional database.
+
+🎯 BigQuery Data Structure
+📂 Project (e.g., my_project)
+┣ 📁 Dataset (e.g., sales_data)
+┃ ┣ 📄 Table (e.g., orders)
+┃ ┗ 📊 View (virtual table based on queries)
+
