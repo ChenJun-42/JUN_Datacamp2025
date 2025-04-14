@@ -1,0 +1,15 @@
+# BigQuery to GCS ETL Pipeline with Apache Airflow & PySpark
+
+This project demonstrates an end-to-end data pipeline that extracts Bitcoin transaction data from BigQuery, processes it using PySpark, and stores the results in Google Cloud Storage (GCS). The pipeline is orchestrated via Apache Airflow and deployed using Docker.
+
+## Architecture Overview
+
+### Infrastructure Components
+1. **Google Cloud Platform (GCP)**  
+   - **Data Lake (GCS)**: Raw and processed data are stored in a GCS bucket for scalable, low-cost storage.  
+   - **Data Warehouse (BigQuery)**: Hosts the public `crypto_bitcoin.transactions` dataset for structured querying.  
+   - **Terraform**: Automates provisioning of GCS buckets and BigQuery datasets (see `terraform/` directory for configurations).  
+
+2. **Airflow & PySpark**  
+   - **Apache Airflow**: Orchestrates the workflow with DAGs to export data from BigQuery to GCS and trigger PySpark processing.  
+   - **PySpark**: Processes raw data (exploding nested fields) and writes results back to GCS. 

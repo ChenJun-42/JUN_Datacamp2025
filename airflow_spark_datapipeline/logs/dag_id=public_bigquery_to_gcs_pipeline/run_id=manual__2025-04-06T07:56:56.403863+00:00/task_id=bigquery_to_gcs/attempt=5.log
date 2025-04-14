@@ -1,0 +1,25 @@
+[2025-04-06T08:13:22.347+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-04-06T08:13:22.355+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: public_bigquery_to_gcs_pipeline.bigquery_to_gcs manual__2025-04-06T07:56:56.403863+00:00 [queued]>
+[2025-04-06T08:13:22.358+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: public_bigquery_to_gcs_pipeline.bigquery_to_gcs manual__2025-04-06T07:56:56.403863+00:00 [queued]>
+[2025-04-06T08:13:22.359+0000] {taskinstance.py:2867} INFO - Starting attempt 5 of 6
+[2025-04-06T08:13:22.364+0000] {taskinstance.py:2890} INFO - Executing <Task(BigQueryInsertJobOperator): bigquery_to_gcs> on 2025-04-06 07:56:56.403863+00:00
+[2025-04-06T08:13:22.376+0000] {warnings.py:112} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70: DeprecationWarning: This process (pid=98) is multi-threaded, use of fork() may lead to deadlocks in the child.
+  pid = os.fork()
+
+[2025-04-06T08:13:22.377+0000] {standard_task_runner.py:72} INFO - Started process 99 to run task
+[2025-04-06T08:13:22.377+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'public_bigquery_to_gcs_pipeline', 'bigquery_to_gcs', 'manual__2025-04-06T07:56:56.403863+00:00', '--job-id', '63', '--raw', '--subdir', 'DAGS_FOLDER/bigquery_to_gcs_pipeline.py', '--cfg-path', '/tmp/tmpv13ypokh']
+[2025-04-06T08:13:22.380+0000] {standard_task_runner.py:105} INFO - Job 63: Subtask bigquery_to_gcs
+[2025-04-06T08:13:22.435+0000] {task_command.py:467} INFO - Running <TaskInstance: public_bigquery_to_gcs_pipeline.bigquery_to_gcs manual__2025-04-06T07:56:56.403863+00:00 [running]> on host 71ebb3f70db9
+[2025-04-06T08:13:22.513+0000] {taskinstance.py:3134} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='Jun Chen' AIRFLOW_CTX_DAG_ID='public_bigquery_to_gcs_pipeline' AIRFLOW_CTX_TASK_ID='bigquery_to_gcs' AIRFLOW_CTX_EXECUTION_DATE='2025-04-06T07:56:56.403863+00:00' AIRFLOW_CTX_TRY_NUMBER='5' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-04-06T07:56:56.403863+00:00'
+[2025-04-06T08:13:22.514+0000] {taskinstance.py:732} INFO - ::endgroup::
+[2025-04-06T08:13:22.541+0000] {crypto.py:82} WARNING - empty cryptography key - values will not be stored encrypted.
+[2025-04-06T08:13:22.542+0000] {connection.py:277} WARNING - Connection schemes (type: google_cloud_platform) shall not contain '_' according to RFC3986.
+[2025-04-06T08:13:22.542+0000] {base.py:84} INFO - Retrieving connection 'google_cloud_default'
+[2025-04-06T08:13:22.613+0000] {bigquery.py:2665} INFO - Executing: {'query': {'query': "\n                EXPORT DATA OPTIONS(\n                  uri='gs://seventh-league-447908-t0--terra-bucket/raw/crypto_bitcoin/2025-04-06/*.parquet',\n                  format='PARQUET',\n                  overwrite=true\n                ) AS\n                SELECT *\n                FROM `bigquery-public-data.crypto_bitcoin.transactions`\n                WHERE DATE(block_timestamp) = '2025-04-06'\n            ", 'useLegacySql': False}}'
+[2025-04-06T08:13:22.614+0000] {bigquery.py:1241} INFO - Inserting job ***_public_bigquery_to_gcs_pipeline_bigquery_to_gcs_2025_04_06T07_56_56_403863_00_00_03253c04f3ef79a38b73c223c0f3070a
+[2025-04-06T08:13:26.545+0000] {bigquery.py:2636} INFO - Job ***_public_bigquery_to_gcs_pipeline_bigquery_to_gcs_2025_04_06T07_56_56_403863_00_00_03253c04f3ef79a38b73c223c0f3070a is completed. Checking the job status
+[2025-04-06T08:13:26.597+0000] {taskinstance.py:341} INFO - ::group::Post task execution logs
+[2025-04-06T08:13:26.598+0000] {taskinstance.py:353} INFO - Marking task as SUCCESS. dag_id=public_bigquery_to_gcs_pipeline, task_id=bigquery_to_gcs, run_id=manual__2025-04-06T07:56:56.403863+00:00, execution_date=20250406T075656, start_date=20250406T081322, end_date=20250406T081326
+[2025-04-06T08:13:26.665+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 0
+[2025-04-06T08:13:26.721+0000] {taskinstance.py:3901} INFO - 1 downstream tasks scheduled from follow-on schedule check
+[2025-04-06T08:13:26.722+0000] {local_task_job_runner.py:245} INFO - ::endgroup::

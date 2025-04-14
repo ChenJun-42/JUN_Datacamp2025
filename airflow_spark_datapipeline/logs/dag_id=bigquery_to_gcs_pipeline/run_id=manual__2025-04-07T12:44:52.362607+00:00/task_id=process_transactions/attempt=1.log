@@ -1,0 +1,218 @@
+[2025-04-07T12:45:11.448+0000] {local_task_job_runner.py:123} INFO - ::group::Pre task execution logs
+[2025-04-07T12:45:11.526+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=non-requeueable deps ti=<TaskInstance: bigquery_to_gcs_pipeline.process_transactions manual__2025-04-07T12:44:52.362607+00:00 [queued]>
+[2025-04-07T12:45:11.530+0000] {taskinstance.py:2614} INFO - Dependencies all met for dep_context=requeueable deps ti=<TaskInstance: bigquery_to_gcs_pipeline.process_transactions manual__2025-04-07T12:44:52.362607+00:00 [queued]>
+[2025-04-07T12:45:11.530+0000] {taskinstance.py:2867} INFO - Starting attempt 1 of 1
+[2025-04-07T12:45:11.536+0000] {taskinstance.py:2890} INFO - Executing <Task(PythonOperator): process_transactions> on 2025-04-07 12:44:52.362607+00:00
+[2025-04-07T12:45:11.541+0000] {logging_mixin.py:190} WARNING - /home/***/.local/lib/python3.12/site-packages/***/task/task_runner/standard_task_runner.py:70 DeprecationWarning: This process (pid=210) is multi-threaded, use of fork() may lead to deadlocks in the child.
+[2025-04-07T12:45:11.540+0000] {standard_task_runner.py:104} INFO - Running: ['***', 'tasks', 'run', 'bigquery_to_gcs_pipeline', 'process_transactions', 'manual__2025-04-07T12:44:52.362607+00:00', '--job-id', '167', '--raw', '--subdir', 'DAGS_FOLDER/bigquery_to_gcs_pipeline.py', '--cfg-path', '/tmp/tmpytfybmf1']
+[2025-04-07T12:45:11.542+0000] {standard_task_runner.py:105} INFO - Job 167: Subtask process_transactions
+[2025-04-07T12:45:11.542+0000] {standard_task_runner.py:72} INFO - Started process 211 to run task
+[2025-04-07T12:45:11.579+0000] {task_command.py:467} INFO - Running <TaskInstance: bigquery_to_gcs_pipeline.process_transactions manual__2025-04-07T12:44:52.362607+00:00 [running]> on host 0f9c43fc55e5
+[2025-04-07T12:45:11.622+0000] {taskinstance.py:3134} INFO - Exporting env vars: AIRFLOW_CTX_DAG_OWNER='data_engineer' AIRFLOW_CTX_DAG_ID='bigquery_to_gcs_pipeline' AIRFLOW_CTX_TASK_ID='process_transactions' AIRFLOW_CTX_EXECUTION_DATE='2025-04-07T12:44:52.362607+00:00' AIRFLOW_CTX_TRY_NUMBER='1' AIRFLOW_CTX_DAG_RUN_ID='manual__2025-04-07T12:44:52.362607+00:00'
+[2025-04-07T12:45:11.623+0000] {taskinstance.py:732} INFO - ::endgroup::
+[2025-04-07T12:45:14.199+0000] {taskinstance.py:3313} ERROR - Task failed with exception
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 768, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 734, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 424, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 238, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 256, in execute_callable
+    return runner.run(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/bigquery_to_gcs_pipeline.py", line 33, in process_bitcoin_transactions
+    df = spark.read.parquet(input_path)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/pyspark/sql/readwriter.py", line 544, in parquet
+    return self._df(self._jreader.parquet(_to_seq(self._spark._sc, paths)))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+                   ^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+           ^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/py4j/protocol.py", line 326, in get_return_value
+    raise Py4JJavaError(
+py4j.protocol.Py4JJavaError: An error occurred while calling o25.parquet.
+: org.apache.hadoop.fs.UnsupportedFileSystemException: No FileSystem for scheme "gs"
+	at org.apache.hadoop.fs.FileSystem.getFileSystemClass(FileSystem.java:3443)
+	at org.apache.hadoop.fs.FileSystem.createFileSystem(FileSystem.java:3466)
+	at org.apache.hadoop.fs.FileSystem.access$300(FileSystem.java:174)
+	at org.apache.hadoop.fs.FileSystem$Cache.getInternal(FileSystem.java:3574)
+	at org.apache.hadoop.fs.FileSystem$Cache.get(FileSystem.java:3521)
+	at org.apache.hadoop.fs.FileSystem.get(FileSystem.java:540)
+	at org.apache.hadoop.fs.Path.getFileSystem(Path.java:365)
+	at org.apache.spark.sql.execution.datasources.DataSource$.$anonfun$checkAndGlobPathIfNecessary$1(DataSource.scala:724)
+	at scala.collection.immutable.List.map(List.scala:293)
+	at org.apache.spark.sql.execution.datasources.DataSource$.checkAndGlobPathIfNecessary(DataSource.scala:722)
+	at org.apache.spark.sql.execution.datasources.DataSource.checkAndGlobPathIfNecessary(DataSource.scala:551)
+	at org.apache.spark.sql.execution.datasources.DataSource.resolveRelation(DataSource.scala:404)
+	at org.apache.spark.sql.DataFrameReader.loadV1Source(DataFrameReader.scala:229)
+	at org.apache.spark.sql.DataFrameReader.$anonfun$load$2(DataFrameReader.scala:211)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.spark.sql.DataFrameReader.load(DataFrameReader.scala:211)
+	at org.apache.spark.sql.DataFrameReader.parquet(DataFrameReader.scala:563)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)
+	at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:374)
+	at py4j.Gateway.invoke(Gateway.java:282)
+	at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+	at py4j.commands.CallCommand.execute(CallCommand.java:79)
+	at py4j.ClientServerConnection.waitForCommands(ClientServerConnection.java:182)
+	at py4j.ClientServerConnection.run(ClientServerConnection.java:106)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+
+[2025-04-07T12:45:14.218+0000] {taskinstance.py:1226} INFO - Marking task as FAILED. dag_id=bigquery_to_gcs_pipeline, task_id=process_transactions, run_id=manual__2025-04-07T12:44:52.362607+00:00, execution_date=20250407T124452, start_date=20250407T124511, end_date=20250407T124514
+[2025-04-07T12:45:14.243+0000] {taskinstance.py:341} INFO - ::group::Post task execution logs
+[2025-04-07T12:45:14.244+0000] {standard_task_runner.py:124} ERROR - Failed to execute job 167 for task process_transactions (An error occurred while calling o25.parquet.
+: org.apache.hadoop.fs.UnsupportedFileSystemException: No FileSystem for scheme "gs"
+	at org.apache.hadoop.fs.FileSystem.getFileSystemClass(FileSystem.java:3443)
+	at org.apache.hadoop.fs.FileSystem.createFileSystem(FileSystem.java:3466)
+	at org.apache.hadoop.fs.FileSystem.access$300(FileSystem.java:174)
+	at org.apache.hadoop.fs.FileSystem$Cache.getInternal(FileSystem.java:3574)
+	at org.apache.hadoop.fs.FileSystem$Cache.get(FileSystem.java:3521)
+	at org.apache.hadoop.fs.FileSystem.get(FileSystem.java:540)
+	at org.apache.hadoop.fs.Path.getFileSystem(Path.java:365)
+	at org.apache.spark.sql.execution.datasources.DataSource$.$anonfun$checkAndGlobPathIfNecessary$1(DataSource.scala:724)
+	at scala.collection.immutable.List.map(List.scala:293)
+	at org.apache.spark.sql.execution.datasources.DataSource$.checkAndGlobPathIfNecessary(DataSource.scala:722)
+	at org.apache.spark.sql.execution.datasources.DataSource.checkAndGlobPathIfNecessary(DataSource.scala:551)
+	at org.apache.spark.sql.execution.datasources.DataSource.resolveRelation(DataSource.scala:404)
+	at org.apache.spark.sql.DataFrameReader.loadV1Source(DataFrameReader.scala:229)
+	at org.apache.spark.sql.DataFrameReader.$anonfun$load$2(DataFrameReader.scala:211)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.spark.sql.DataFrameReader.load(DataFrameReader.scala:211)
+	at org.apache.spark.sql.DataFrameReader.parquet(DataFrameReader.scala:563)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)
+	at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:374)
+	at py4j.Gateway.invoke(Gateway.java:282)
+	at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+	at py4j.commands.CallCommand.execute(CallCommand.java:79)
+	at py4j.ClientServerConnection.waitForCommands(ClientServerConnection.java:182)
+	at py4j.ClientServerConnection.run(ClientServerConnection.java:106)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+; 211)
+Traceback (most recent call last):
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/task/task_runner/standard_task_runner.py", line 117, in _start_by_fork
+    ret = args.func(args, dag=self.dag)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/cli_config.py", line 49, in command
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/cli.py", line 116, in wrapper
+    return f(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 483, in task_run
+    task_return_code = _run_task_by_selected_method(args, _dag, ti)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 256, in _run_task_by_selected_method
+    return _run_raw_task(args, ti)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/cli/commands/task_command.py", line 341, in _run_raw_task
+    return ti._run_raw_task(
+           ^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/session.py", line 97, in wrapper
+    return func(*args, session=session, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3006, in _run_raw_task
+    return _run_raw_task(
+           ^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 274, in _run_raw_task
+    TaskInstance._execute_task_with_callbacks(
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3161, in _execute_task_with_callbacks
+    result = self._execute_task(context, task_orig)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 3185, in _execute_task
+    return _execute_task(self, context, task_orig)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 768, in _execute_task
+    result = _execute_callable(context=context, **execute_callable_kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/taskinstance.py", line 734, in _execute_callable
+    return ExecutionCallableRunner(
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/models/baseoperator.py", line 424, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 238, in execute
+    return_value = self.execute_callable()
+                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/operators/python.py", line 256, in execute_callable
+    return runner.run(*self.op_args, **self.op_kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/airflow/utils/operator_helpers.py", line 252, in run
+    return self.func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/airflow/dags/bigquery_to_gcs_pipeline.py", line 33, in process_bitcoin_transactions
+    df = spark.read.parquet(input_path)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/pyspark/sql/readwriter.py", line 544, in parquet
+    return self._df(self._jreader.parquet(_to_seq(self._spark._sc, paths)))
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/py4j/java_gateway.py", line 1322, in __call__
+    return_value = get_return_value(
+                   ^^^^^^^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/pyspark/errors/exceptions/captured.py", line 179, in deco
+    return f(*a, **kw)
+           ^^^^^^^^^^^
+  File "/home/airflow/.local/lib/python3.12/site-packages/py4j/protocol.py", line 326, in get_return_value
+    raise Py4JJavaError(
+py4j.protocol.Py4JJavaError: An error occurred while calling o25.parquet.
+: org.apache.hadoop.fs.UnsupportedFileSystemException: No FileSystem for scheme "gs"
+	at org.apache.hadoop.fs.FileSystem.getFileSystemClass(FileSystem.java:3443)
+	at org.apache.hadoop.fs.FileSystem.createFileSystem(FileSystem.java:3466)
+	at org.apache.hadoop.fs.FileSystem.access$300(FileSystem.java:174)
+	at org.apache.hadoop.fs.FileSystem$Cache.getInternal(FileSystem.java:3574)
+	at org.apache.hadoop.fs.FileSystem$Cache.get(FileSystem.java:3521)
+	at org.apache.hadoop.fs.FileSystem.get(FileSystem.java:540)
+	at org.apache.hadoop.fs.Path.getFileSystem(Path.java:365)
+	at org.apache.spark.sql.execution.datasources.DataSource$.$anonfun$checkAndGlobPathIfNecessary$1(DataSource.scala:724)
+	at scala.collection.immutable.List.map(List.scala:293)
+	at org.apache.spark.sql.execution.datasources.DataSource$.checkAndGlobPathIfNecessary(DataSource.scala:722)
+	at org.apache.spark.sql.execution.datasources.DataSource.checkAndGlobPathIfNecessary(DataSource.scala:551)
+	at org.apache.spark.sql.execution.datasources.DataSource.resolveRelation(DataSource.scala:404)
+	at org.apache.spark.sql.DataFrameReader.loadV1Source(DataFrameReader.scala:229)
+	at org.apache.spark.sql.DataFrameReader.$anonfun$load$2(DataFrameReader.scala:211)
+	at scala.Option.getOrElse(Option.scala:189)
+	at org.apache.spark.sql.DataFrameReader.load(DataFrameReader.scala:211)
+	at org.apache.spark.sql.DataFrameReader.parquet(DataFrameReader.scala:563)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:77)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:569)
+	at py4j.reflection.MethodInvoker.invoke(MethodInvoker.java:244)
+	at py4j.reflection.ReflectionEngine.invoke(ReflectionEngine.java:374)
+	at py4j.Gateway.invoke(Gateway.java:282)
+	at py4j.commands.AbstractCommand.invokeMethod(AbstractCommand.java:132)
+	at py4j.commands.CallCommand.execute(CallCommand.java:79)
+	at py4j.ClientServerConnection.waitForCommands(ClientServerConnection.java:182)
+	at py4j.ClientServerConnection.run(ClientServerConnection.java:106)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+
+[2025-04-07T12:45:14.268+0000] {local_task_job_runner.py:266} INFO - Task exited with return code 1
+[2025-04-07T12:45:14.328+0000] {taskinstance.py:3901} INFO - 0 downstream tasks scheduled from follow-on schedule check
+[2025-04-07T12:45:14.332+0000] {local_task_job_runner.py:245} INFO - ::endgroup::
